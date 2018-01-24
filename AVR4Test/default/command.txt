@@ -1,0 +1,2 @@
+avrdude -p 8515 -P com4 -c avrisp -b 19200 -v -U flash:w:AVR4Test.hex
+avrdude -p 8515 -P com4 -c avrisp -b 19200 -v -U flash:r:"flash.bin":r

@@ -1,0 +1,4 @@
+avrdude -p 8515 -P com4 -c avrisp -b 19200 -v -U flash:w:Program.hex
+avrdude -p 8515 -P com4 -c avrisp -b 19200 -v -U flash:r:"Flash.bin":r
+avrdude -p 2313 -P com4 -c avrisp -b 19200 -v -U flash:w:Program.hex
+avrdude -p 2313 -P com4 -c avrisp -b 19200 -v -U flash:r:"Flash.bin":r

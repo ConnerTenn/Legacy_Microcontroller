@@ -1,0 +1,283 @@
+
+LightController.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000180  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  000001d4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 0000003c  00000000  00000000  000001f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   00000146  00000000  00000000  00000230  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 000000a3  00000000  00000000  00000376  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   000000fb  00000000  00000000  00000419  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000050  00000000  00000000  00000514  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    000000a8  00000000  00000000  00000564  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0a c0       	rjmp	.+20     	; 0x16 <__ctors_end>
+   2:	0f c0       	rjmp	.+30     	; 0x22 <__bad_interrupt>
+   4:	0e c0       	rjmp	.+28     	; 0x22 <__bad_interrupt>
+   6:	0d c0       	rjmp	.+26     	; 0x22 <__bad_interrupt>
+   8:	0c c0       	rjmp	.+24     	; 0x22 <__bad_interrupt>
+   a:	0b c0       	rjmp	.+22     	; 0x22 <__bad_interrupt>
+   c:	0a c0       	rjmp	.+20     	; 0x22 <__bad_interrupt>
+   e:	09 c0       	rjmp	.+18     	; 0x22 <__bad_interrupt>
+  10:	08 c0       	rjmp	.+16     	; 0x22 <__bad_interrupt>
+  12:	07 c0       	rjmp	.+14     	; 0x22 <__bad_interrupt>
+  14:	06 c0       	rjmp	.+12     	; 0x22 <__bad_interrupt>
+
+00000016 <__ctors_end>:
+  16:	11 24       	eor	r1, r1
+  18:	1f be       	out	0x3f, r1	; 63
+  1a:	cf ed       	ldi	r28, 0xDF	; 223
+  1c:	cd bf       	out	0x3d, r28	; 61
+  1e:	8c d0       	rcall	.+280    	; 0x138 <main>
+  20:	ad c0       	rjmp	.+346    	; 0x17c <_exit>
+
+00000022 <__bad_interrupt>:
+  22:	ee cf       	rjmp	.-36     	; 0x0 <__vectors>
+
+00000024 <Delay>:
+#include <avr/io.h>
+//#define DDRD _SFR_IO8(0x0A)
+//#define PORTD _SFR_IO8(0x0B)
+
+void Delay(long count)
+{
+  24:	df 93       	push	r29
+  26:	cf 93       	push	r28
+  28:	cd b7       	in	r28, 0x3d	; 61
+  2a:	de b7       	in	r29, 0x3e	; 62
+  2c:	2a 97       	sbiw	r28, 0x0a	; 10
+  2e:	0f b6       	in	r0, 0x3f	; 63
+  30:	f8 94       	cli
+  32:	de bf       	out	0x3e, r29	; 62
+  34:	0f be       	out	0x3f, r0	; 63
+  36:	cd bf       	out	0x3d, r28	; 61
+  38:	6f 83       	std	Y+7, r22	; 0x07
+  3a:	78 87       	std	Y+8, r23	; 0x08
+  3c:	89 87       	std	Y+9, r24	; 0x09
+  3e:	9a 87       	std	Y+10, r25	; 0x0a
+	
+	for (long i = 0; i < count; i++)
+  40:	1b 82       	std	Y+3, r1	; 0x03
+  42:	1c 82       	std	Y+4, r1	; 0x04
+  44:	1d 82       	std	Y+5, r1	; 0x05
+  46:	1e 82       	std	Y+6, r1	; 0x06
+  48:	0d c0       	rjmp	.+26     	; 0x64 <__SREG__+0x25>
+	{
+		int a = 0;
+  4a:	1a 82       	std	Y+2, r1	; 0x02
+  4c:	19 82       	std	Y+1, r1	; 0x01
+//#define PORTD _SFR_IO8(0x0B)
+
+void Delay(long count)
+{
+	
+	for (long i = 0; i < count; i++)
+  4e:	8b 81       	ldd	r24, Y+3	; 0x03
+  50:	9c 81       	ldd	r25, Y+4	; 0x04
+  52:	ad 81       	ldd	r26, Y+5	; 0x05
+  54:	be 81       	ldd	r27, Y+6	; 0x06
+  56:	01 96       	adiw	r24, 0x01	; 1
+  58:	a1 1d       	adc	r26, r1
+  5a:	b1 1d       	adc	r27, r1
+  5c:	8b 83       	std	Y+3, r24	; 0x03
+  5e:	9c 83       	std	Y+4, r25	; 0x04
+  60:	ad 83       	std	Y+5, r26	; 0x05
+  62:	be 83       	std	Y+6, r27	; 0x06
+  64:	2b 81       	ldd	r18, Y+3	; 0x03
+  66:	3c 81       	ldd	r19, Y+4	; 0x04
+  68:	4d 81       	ldd	r20, Y+5	; 0x05
+  6a:	5e 81       	ldd	r21, Y+6	; 0x06
+  6c:	8f 81       	ldd	r24, Y+7	; 0x07
+  6e:	98 85       	ldd	r25, Y+8	; 0x08
+  70:	a9 85       	ldd	r26, Y+9	; 0x09
+  72:	ba 85       	ldd	r27, Y+10	; 0x0a
+  74:	28 17       	cp	r18, r24
+  76:	39 07       	cpc	r19, r25
+  78:	4a 07       	cpc	r20, r26
+  7a:	5b 07       	cpc	r21, r27
+  7c:	34 f3       	brlt	.-52     	; 0x4a <__SREG__+0xb>
+	{
+		int a = 0;
+	}
+}
+  7e:	2a 96       	adiw	r28, 0x0a	; 10
+  80:	0f b6       	in	r0, 0x3f	; 63
+  82:	f8 94       	cli
+  84:	de bf       	out	0x3e, r29	; 62
+  86:	0f be       	out	0x3f, r0	; 63
+  88:	cd bf       	out	0x3d, r28	; 61
+  8a:	cf 91       	pop	r28
+  8c:	df 91       	pop	r29
+  8e:	08 95       	ret
+
+00000090 <SetPin>:
+
+void SetPin(char pin, char value)
+{
+  90:	df 93       	push	r29
+  92:	cf 93       	push	r28
+  94:	00 d0       	rcall	.+0      	; 0x96 <SetPin+0x6>
+  96:	0f 92       	push	r0
+  98:	cd b7       	in	r28, 0x3d	; 61
+  9a:	de b7       	in	r29, 0x3e	; 62
+  9c:	8a 83       	std	Y+2, r24	; 0x02
+  9e:	6b 83       	std	Y+3, r22	; 0x03
+	unsigned char buf = PORTD;
+  a0:	e2 e3       	ldi	r30, 0x32	; 50
+  a2:	f0 e0       	ldi	r31, 0x00	; 0
+  a4:	80 81       	ld	r24, Z
+  a6:	89 83       	std	Y+1, r24	; 0x01
+	buf = buf & ~(1 << pin);
+  a8:	8a 81       	ldd	r24, Y+2	; 0x02
+  aa:	28 2f       	mov	r18, r24
+  ac:	30 e0       	ldi	r19, 0x00	; 0
+  ae:	81 e0       	ldi	r24, 0x01	; 1
+  b0:	90 e0       	ldi	r25, 0x00	; 0
+  b2:	02 c0       	rjmp	.+4      	; 0xb8 <SetPin+0x28>
+  b4:	88 0f       	add	r24, r24
+  b6:	99 1f       	adc	r25, r25
+  b8:	2a 95       	dec	r18
+  ba:	e2 f7       	brpl	.-8      	; 0xb4 <SetPin+0x24>
+  bc:	98 2f       	mov	r25, r24
+  be:	90 95       	com	r25
+  c0:	89 81       	ldd	r24, Y+1	; 0x01
+  c2:	89 23       	and	r24, r25
+  c4:	89 83       	std	Y+1, r24	; 0x01
+	buf = buf | (value << pin);
+  c6:	8b 81       	ldd	r24, Y+3	; 0x03
+  c8:	28 2f       	mov	r18, r24
+  ca:	30 e0       	ldi	r19, 0x00	; 0
+  cc:	8a 81       	ldd	r24, Y+2	; 0x02
+  ce:	88 2f       	mov	r24, r24
+  d0:	90 e0       	ldi	r25, 0x00	; 0
+  d2:	42 2f       	mov	r20, r18
+  d4:	53 2f       	mov	r21, r19
+  d6:	02 c0       	rjmp	.+4      	; 0xdc <SetPin+0x4c>
+  d8:	44 0f       	add	r20, r20
+  da:	55 1f       	adc	r21, r21
+  dc:	8a 95       	dec	r24
+  de:	e2 f7       	brpl	.-8      	; 0xd8 <SetPin+0x48>
+  e0:	84 2f       	mov	r24, r20
+  e2:	95 2f       	mov	r25, r21
+  e4:	98 2f       	mov	r25, r24
+  e6:	89 81       	ldd	r24, Y+1	; 0x01
+  e8:	89 2b       	or	r24, r25
+  ea:	89 83       	std	Y+1, r24	; 0x01
+	PORTD = buf;
+  ec:	e2 e3       	ldi	r30, 0x32	; 50
+  ee:	f0 e0       	ldi	r31, 0x00	; 0
+  f0:	89 81       	ldd	r24, Y+1	; 0x01
+  f2:	80 83       	st	Z, r24
+}
+  f4:	0f 90       	pop	r0
+  f6:	0f 90       	pop	r0
+  f8:	0f 90       	pop	r0
+  fa:	cf 91       	pop	r28
+  fc:	df 91       	pop	r29
+  fe:	08 95       	ret
+
+00000100 <ReadPin>:
+
+char ReadPin(char pin)
+{
+ 100:	df 93       	push	r29
+ 102:	cf 93       	push	r28
+ 104:	0f 92       	push	r0
+ 106:	cd b7       	in	r28, 0x3d	; 61
+ 108:	de b7       	in	r29, 0x3e	; 62
+ 10a:	89 83       	std	Y+1, r24	; 0x01
+	return (PIND >> pin) & 0b1;
+ 10c:	e0 e3       	ldi	r30, 0x30	; 48
+ 10e:	f0 e0       	ldi	r31, 0x00	; 0
+ 110:	80 81       	ld	r24, Z
+ 112:	28 2f       	mov	r18, r24
+ 114:	30 e0       	ldi	r19, 0x00	; 0
+ 116:	89 81       	ldd	r24, Y+1	; 0x01
+ 118:	88 2f       	mov	r24, r24
+ 11a:	90 e0       	ldi	r25, 0x00	; 0
+ 11c:	42 2f       	mov	r20, r18
+ 11e:	53 2f       	mov	r21, r19
+ 120:	02 c0       	rjmp	.+4      	; 0x126 <ReadPin+0x26>
+ 122:	55 95       	asr	r21
+ 124:	47 95       	ror	r20
+ 126:	8a 95       	dec	r24
+ 128:	e2 f7       	brpl	.-8      	; 0x122 <ReadPin+0x22>
+ 12a:	84 2f       	mov	r24, r20
+ 12c:	95 2f       	mov	r25, r21
+ 12e:	81 70       	andi	r24, 0x01	; 1
+}
+ 130:	0f 90       	pop	r0
+ 132:	cf 91       	pop	r28
+ 134:	df 91       	pop	r29
+ 136:	08 95       	ret
+
+00000138 <main>:
+
+void main()
+{
+ 138:	df 93       	push	r29
+ 13a:	cf 93       	push	r28
+ 13c:	00 d0       	rcall	.+0      	; 0x13e <main+0x6>
+ 13e:	cd b7       	in	r28, 0x3d	; 61
+ 140:	de b7       	in	r29, 0x3e	; 62
+	//DDRA = 0xFF;
+	//DDRB = 0xFF;
+	//DDRC = 0xFF;
+	DDRD = 0b11001111;
+ 142:	e1 e3       	ldi	r30, 0x31	; 49
+ 144:	f0 e0       	ldi	r31, 0x00	; 0
+ 146:	8f ec       	ldi	r24, 0xCF	; 207
+ 148:	80 83       	st	Z, r24
+	//PORTD = 0b11111111;
+
+	int i = 0;
+ 14a:	1a 82       	std	Y+2, r1	; 0x02
+ 14c:	19 82       	std	Y+1, r1	; 0x01
+	while (1)
+	{
+		SetPin(5, 1);
+ 14e:	85 e0       	ldi	r24, 0x05	; 5
+ 150:	61 e0       	ldi	r22, 0x01	; 1
+ 152:	9e df       	rcall	.-196    	; 0x90 <SetPin>
+		Delay(100);
+ 154:	64 e6       	ldi	r22, 0x64	; 100
+ 156:	70 e0       	ldi	r23, 0x00	; 0
+ 158:	80 e0       	ldi	r24, 0x00	; 0
+ 15a:	90 e0       	ldi	r25, 0x00	; 0
+ 15c:	63 df       	rcall	.-314    	; 0x24 <Delay>
+		SetPin(5, 0);
+ 15e:	85 e0       	ldi	r24, 0x05	; 5
+ 160:	60 e0       	ldi	r22, 0x00	; 0
+ 162:	96 df       	rcall	.-212    	; 0x90 <SetPin>
+		SetPin(6, ReadPin(5));
+ 164:	85 e0       	ldi	r24, 0x05	; 5
+ 166:	cc df       	rcall	.-104    	; 0x100 <ReadPin>
+ 168:	98 2f       	mov	r25, r24
+ 16a:	86 e0       	ldi	r24, 0x06	; 6
+ 16c:	69 2f       	mov	r22, r25
+ 16e:	90 df       	rcall	.-224    	; 0x90 <SetPin>
+		Delay(100);
+ 170:	64 e6       	ldi	r22, 0x64	; 100
+ 172:	70 e0       	ldi	r23, 0x00	; 0
+ 174:	80 e0       	ldi	r24, 0x00	; 0
+ 176:	90 e0       	ldi	r25, 0x00	; 0
+ 178:	55 df       	rcall	.-342    	; 0x24 <Delay>
+ 17a:	e9 cf       	rjmp	.-46     	; 0x14e <main+0x16>
+
+0000017c <_exit>:
+ 17c:	f8 94       	cli
+
+0000017e <__stop_program>:
+ 17e:	ff cf       	rjmp	.-2      	; 0x17e <__stop_program>
